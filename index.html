@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>نموذج متابعة الأدوية اليومي الثابت - بدون إعادة تعيين</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+            color: #343a40;
+            text-align: right;
+        }
+        .container {
+            max-width: 700px;
+            width: 100%;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+        }
+        h1 {
+            color: #007bff;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        h2 {
+            color: #007bff;
+            margin-top: 20px;
+            padding-bottom: 5px;
+            font-size: 1.2em;
+        }
+        /* --- قسم المتابعة اليومية --- */
+        #daily-intake-area {
+            border: 2px solid #007bff;
+            border-radius: 10px;
+            padding: 15px;
+            background-color: #eaf3ff;
+            margin-bottom: 10px; /* تقليل الهامش بعد إزالة زر إعادة التعيين */
+        }
+        .med-config-entry {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr auto; 
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px 5px;
+            border-bottom: 1px dashed #ced4da;
+            transition: opacity 0.3s;
+        }
+        .med-config-entry:last-child {
+            border-bottom: none;
+        }
+        
+        /* قاعدة الشطب (Strikethrough) */
+        .med-config-entry.taken-status strong,
+        .med-config-entry.taken-status .instructions-text {
+            text-decoration: line-through; 
+            color: #a0a0a0; 
+        }
+
+        .med-config-entry strong {
+            font-size: 1em;
+            color: #343a40;
+            transition: all 0.3s;
+        }
+        .instructions-text {
+            font-size: 0.9em;
+            color: #6c757d;
+            transition: all 0.3s;
+        }
+        
+        /* --- تنسيق الأزرار --- */
+        .log-btn {
+            color: white;
+            border: none;
+            padding: 8px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            width: 100px;
+            text-align: center;
+            white-space: nowrap;
+            font-size: 0.9em;
+        }
+
+        /* --- الألوان حسب حالة التناول --- */
+        .taken { background-color: #28a745; } 
+        .not-taken { background-color: #6c757d; } 
+        .taken:hover { background-color: #1e7e34; }
+        .not-taken:hover { background-color: #5a6268; }
+
+        /* **استعلامات الوسائط (Media Queries) للهواتف الصغيرة جدًا** */
+        @media (max-width: 500px) {
+            .med-config-entry {
+                grid-template-columns: 1fr 1fr;
+                grid-template-areas: 
+                    "med-name instructions"
+                    "button button";
+                padding-bottom: 20px;
+            }
+            .med-config-entry strong {
+                grid-area: med-name;
+            }
+            .instructions-text {
+                grid-area: instructions;
+                text-align: left;
+            }
+            .log-btn {
+                grid-area: button;
+                width: 100%;
+                padding: 12px 10px;
+                font-size: 1em;
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>💊 المتابعة اليومية للأدوية</h1>
+
+    <div id="daily-intake-area">
+        <h2>🗓️  <span id="current-date"></span></h2>
+        
+        
+        <div class="med-config-entry" data-med-entry-id="Nexium-AM">
+            <strong>نيكسيوم</strong>
+            <span class="instructions-text">حبة صباحاً قبل الأكل</span>
+            <button class="log-btn not-taken" data-med-id="Nexium-AM">لم يتناول</button>
+        </div>
+
+        <div class="med-config-entry" data-med-entry-id="Immune-AM">
+            <strong>دواء المناعة</strong>
+            <span class="instructions-text">حبتين صباحاً قبل الأكل</span>
+            <button class="log-btn not-taken" data-med-id="Immune-AM">لم يتناول</button>
+        </div>
+
+        <div class="med-config-entry" data-med-entry-id="SugarRegulator-AM">
+            <strong>منظم السكر</strong>
+            <span class="instructions-text">حبة صباحاً مع الأكل</span>
+            <button class="log-btn not-taken" data-med-id="SugarRegulator-AM">لم يتناول</button>
+        </div>
+        
+        <div class="med-config-entry" data-med-entry-id="Cortisone-Daily">
+            <strong>الكورتيزون</strong>
+            <span class="instructions-text">حبتين بعد الأكل يومياً</span>
+            <button class="log-btn not-taken" data-med-id="Cortisone-Daily">لم يتناول</button>
+        </div>
+        
+        <div class="med-config-entry" data-med-entry-id="VitaminD-Daily">
+            <strong>فيتامين د</strong>
+            <span class="instructions-text">حبة بعد الأكل يومياً</span>
+            <button class="log-btn not-taken" data-med-id="VitaminD-Daily">لم يتناول</button>
+        </div>
+        
+        <div class="med-config-entry" data-med-entry-id="Immune-PM">
+            <strong>دواء المناعة</strong>
+            <span class="instructions-text">حبتين مساءً قبل الأكل</span>
+            <button class="log-btn not-taken" data-med-id="Immune-PM">لم يتناول</button>
+        </div>
+        
+        <div class="med-config-entry" data-med-entry-id="Nexium-PM">
+            <strong>نيكسيوم</strong>
+            <span class="instructions-text">حبة مساءً قبل الأكل</span>
+            <button class="log-btn not-taken" data-med-id="Nexium-PM">لم يتناول</button>
+        </div>
+        
+        <div class="med-config-entry" data-med-entry-id="SugarRegulator-PM">
+            <strong>منظم السكر</strong>
+            <span class="instructions-text">حبة مع الأكل مساءً</span>
+            <button class="log-btn not-taken" data-med-id="SugarRegulator-PM">لم يتناول</button>
+        </div>
+
+    </div>
+    
+    </div>
+
+<script>
+    const logButtons = document.querySelectorAll('.log-btn');
+    const STORAGE_KEY_STATUS = 'permanentMedStatus';
+
+    // عرض التاريخ الحالي
+    document.getElementById('current-date').textContent = new Date().toLocaleDateString('ar-EG', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+
+    // --- وظائف التخزين لحالة الأزرار ---
+    function getMedStatus() {
+        const stored = localStorage.getItem(STORAGE_KEY_STATUS);
+        return stored ? JSON.parse(stored) : {};
+    }
+    
+    function saveMedStatus(statusObject) {
+        localStorage.setItem(STORAGE_KEY_STATUS, JSON.stringify(statusObject));
+    }
+
+    // --- وظيفة تحديث حالة الأزرار على الواجهة ---
+    function updateButtonState(button, isTaken) {
+        const entryDiv = button.closest('.med-config-entry');
+
+        if (isTaken) {
+            button.classList.remove('not-taken');
+            button.classList.add('taken');
+            button.textContent = 'تم التناول';
+            entryDiv.classList.add('taken-status'); // إضافة كلاس الشطب
+        } else {
+            button.classList.remove('taken');
+            button.classList.add('not-taken');
+            button.textContent = 'لم يتناول';
+            entryDiv.classList.remove('taken-status'); // إزالة كلاس الشطب
+        }
+    }
+
+    // --- وظيفة تطبيق الحالة المحفوظة عند تحميل الصفحة ---
+    function loadButtonStates() {
+        const status = getMedStatus();
+        logButtons.forEach(button => {
+            const medId = button.getAttribute('data-med-id');
+            const isTaken = status.hasOwnProperty(medId) ? status[medId] : false;
+            
+            updateButtonState(button, isTaken);
+        });
+    }
+
+    // --- مستمعي الأحداث: تبديل الحالة عند الضغط على الزر ---
+    logButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const medId = this.getAttribute('data-med-id');
+            const status = getMedStatus();
+
+            const isCurrentlyTaken = this.classList.contains('taken');
+            const newStatus = !isCurrentlyTaken;
+
+            // تحديث الواجهة والتخزين
+            updateButtonState(this, newStatus);
+            status[medId] = newStatus;
+            saveMedStatus(status);
+        });
+    });
+
+    // تحميل الحالة عند فتح الصفحة
+    loadButtonStates();
+</script>
+
+</body>
+</html>

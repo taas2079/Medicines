@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <title>نموذج متابعة الأدوية اليومي الثابت - بدون إعادة تعيين</title>
+    <title>نموذج متابعة الأدوية اليومي الثابت - تحديث تلقائي للتاريخ</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -41,7 +41,7 @@
             border-radius: 10px;
             padding: 15px;
             background-color: #eaf3ff;
-            margin-bottom: 10px; /* تقليل الهامش بعد إزالة زر إعادة التعيين */
+            margin-bottom: 10px;
         }
         .med-config-entry {
             display: grid;
@@ -125,12 +125,11 @@
 <body>
 
 <div class="container">
-    <h1>💊 المتابعة اليومية للأدوية</h1>
+    <h1>💊 مواعيد جرعات الأدوية اليومي</h1>
 
     <div id="daily-intake-area">
-        <h2>🗓️  <span id="current-date"></span></h2>
-        
-        
+        <h2>🗓️ <span id="current-date"></span></h2>
+                
         <div class="med-config-entry" data-med-entry-id="Nexium-AM">
             <strong>نيكسيوم</strong>
             <span class="instructions-text">حبة صباحاً قبل الأكل</span>
@@ -181,18 +180,34 @@
 
     </div>
     
-    </div>
+</div>
 
 <script>
     const logButtons = document.querySelectorAll('.log-btn');
+    const dateDisplay = document.getElementById('current-date');
     const STORAGE_KEY_STATUS = 'permanentMedStatus';
 
-    // عرض التاريخ الحالي
-    document.getElementById('current-date').textContent = new Date().toLocaleDateString('ar-EG', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-    });
+    // --- وظيفة تحديث التاريخ والوقت كل ثانية ---
+    function updateClock() {
+        const now = new Date();
+        // تنسيق التاريخ والوقت (اليوم - الشهر - السنة | الساعة : الدقيقة : الثانية)
+        const formattedDate = now.toLocaleDateString('ar-EG', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+        const formattedTime = now.toLocaleTimeString('ar-EG', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        });
+        
+        dateDisplay.textContent = `${formattedDate} | ${formattedTime}`;
+    }
+
+    // تشغيل الدالة فوراً ثم كل 1000 ملي ثانية (ثانية واحدة)
+    updateClock();
+    setInterval(updateClock, 1000);
 
     // --- وظائف التخزين لحالة الأزرار ---
     function getMedStatus() {

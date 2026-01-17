@@ -1,154 +1,179 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>متابعة الأدوية - iOS Style</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>متابعة جرعات الأدوية</title>
 
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial;
-            background: #f2f5f9;
-            margin: 0;
-            padding: 25px;
-            color: #1c1c1e;
-        }
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial;
+      background: #f2f5f9;
+      margin: 0;
+      padding: 25px;
+      color: #1c1c1e;
+    }
 
-        .container {
-            max-width: 850px;
-            margin: auto;
-            background: #ffffff;
-            padding: 30px;
-            border-radius: 28px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-        }
+    .container {
+      max-width: 850px;
+      margin: auto;
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 28px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+    }
 
-        h1 {
-            text-align: center;
-            color: #007aff;
-            margin-bottom: 10px;
-            font-size: 2.2em;
-            font-weight: 700;
-        }
+    h1 {
+      text-align: center;
+      color: #007aff;
+      margin-bottom: 10px;
+      font-size: 2.2em;
+      font-weight: 700;
+    }
 
-        h2 {
-            margin-top: 25px;
-            color: #5c6b7a;
-            font-size: 1.2em;
-            font-weight: 600;
-        }
+    h2 {
+      margin-top: 25px;
+      color: #5c6b7a;
+      font-size: 1.2em;
+      font-weight: 600;
+    }
 
-        .date-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
+    .date-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
 
-        /* 🔵 الإطار الخارجي الذي يضم كل الأدوية */
-        .med-wrapper {
-            background: #fdfdfd;
-            border-radius: 22px;
-            padding: 20px;
-            margin-top: 20px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.06);
-            border: 1px solid #e6e6e6;
-        }
+    /* الإطار الخارجي */
+    .med-wrapper {
+      background: #fdfdfd;
+      border-radius: 22px;
+      padding: 20px;
+      margin-top: 20px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+      border: 1px solid #e6e6e6;
+    }
 
-        .med-block {
-            width: 100%;
-        }
+    .med-block {
+      width: 100%;
+    }
 
-        .med-entry {
-            display: grid;
-            grid-template-columns: 45px 1fr 1.5fr auto auto;
-            gap: 12px;
-            padding: 18px;
-            border-radius: 20px;
-            background: #ffffff;
-            border: 1px solid #e3e9f1;
-            box-shadow: 0 6px 18px rgba(0,0,0,0.05);
-            align-items: center;
-        }
+    /* تصميم البطاقة المتجاوبة */
+    .med-entry {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      border-radius: 20px;
+      background: #ffffff;
+      border: 1px solid #e3e9f1;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+    }
 
-        .med-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 6px;
-        }
+    .med-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+      min-width: 200px;
+    }
 
-        .med-icon img {
-            width: 28px;
-            height: 28px;
-        }
+    .med-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: #f0f4ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-        .time-log {
-            font-size: 0.80em;
-            color: #007aff;
-            white-space: nowrap;
-            margin-right: 8px;
-        }
+    .med-icon img {
+      width: 24px;
+    }
 
-        .log-btn {
-            padding: 10px 16px;
-            border: none;
-            border-radius: 14px;
-            cursor: pointer;
-            color: white;
-            font-weight: 600;
-            font-size: 0.95em;
-            min-width: 110px;
-        }
+    .med-info {
+      display: flex;
+      flex-direction: column;
+    }
 
-        .taken-btn { background-color: #34c759; }
-        .not-taken-btn { background-color: #8e8e93; }
+    .med-info strong {
+      font-size: 1em;
+      color: #1c1c1e;
+    }
 
-        /* 🔵 الفاصل */
-        .divider {
-            width: 100%;
-            height: 1px;
-            background: #dcdcdc;
-            margin: 18px 0;
-        }
+    .med-info span {
+      font-size: 0.9em;
+      color: #4a4a4a;
+    }
 
-        @media (max-width: 600px) {
-            .med-entry {
-                grid-template-columns: 45px 1fr;
-            }
-        }
-    </style>
+    .med-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .time-log {
+      font-size: 0.8em;
+      color: #007aff;
+      white-space: nowrap;
+    }
+
+    .log-btn {
+      padding: 8px 14px;
+      border-radius: 12px;
+      font-size: 0.9em;
+      min-width: 100px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      color: white;
+    }
+
+    .taken-btn {
+      background-color: #34c759;
+    }
+
+    .not-taken-btn {
+      background-color: #8e8e93;
+    }
+
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: #dcdcdc;
+      margin: 14px 0;
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="container">
-
+  <div class="container">
     <h1>💊 متابعة جرعات الأدوية</h1>
 
     <div class="date-row">
-        <div>🗓️ <span id="current-date"></span></div>
-        <div id="current-time"></div>
+      <div>🗓️ <span id="current-date"></span></div>
+      <div id="current-time"></div>
     </div>
 
     <h2>قائمة الأدوية اليوم</h2>
 
-    <!-- 🔵 الإطار الخارجي -->
     <div class="med-wrapper">
-        <div id="med-list"></div>
+      <div id="med-list"></div>
     </div>
+  </div>
 
-</div>
+  <audio id="ding-sound" preload="auto">
+    <source src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg" type="audio/ogg" />
+  </audio>
 
-<audio id="ding-sound" preload="auto">
-    <source src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg" type="audio/ogg">
-</audio>
-
-<script>
+  <script>
     const dateDisplay = document.getElementById("current-date");
     const timeDisplay = document.getElementById("current-time");
     const medListDiv = document.getElementById("med-list");
@@ -158,103 +183,107 @@
     const STORAGE_TIMES = "fixedMedTimes";
 
     const medications = [
-        { id: "Immune-AM", name: "دواء المناعة", instructions: "حبتين صباحاً قبل الأكل", icon: "https://img.icons8.com/color/48/pill.png", color: "#e8f0ff" },
-        { id: "Sugar-AM", name: "منظم السكر", instructions: "حبة صباحاً مع الأكل", icon: "https://img.icons8.com/color/48/insulin-pen.png", color: "#fff4e6" },
-        { id: "VitaminD", name: "فيتامين د", instructions: "حبة بعد الأكل يومياً", icon: "https://raw.githubusercontent.com/encharm/Font-Awesome-SVG-PNG/master/black/svg/sun-o.svg", color: "#e8ffe8" },
-        { id: "Immune-PM", name: "دواء المناعة", instructions: "حبتين مساءً قبل الأكل", icon: "https://img.icons8.com/color/48/pill.png", color: "#ffe8f0" },
-        { id: "Sugar-PM", name: "منظم السكر", instructions: "حبة مساءً مع الأكل", icon: "https://img.icons8.com/color/48/insulin-pen.png", color: "#e6f7ff" }
+      { id: "Immune-AM", name: "دواء المناعة", instructions: "حبتين صباحاً قبل الأكل", icon: "https://img.icons8.com/color/48/pill.png", color: "#e8f0ff" },
+      { id: "Sugar-AM", name: "منظم السكر", instructions: "حبة صباحاً مع الأكل", icon: "https://img.icons8.com/color/48/insulin-pen.png", color: "#fff4e6" },
+      { id: "VitaminD", name: "فيتامين د", instructions: "حبة بعد الأكل يومياً", icon: "https://raw.githubusercontent.com/encharm/Font-Awesome-SVG-PNG/master/black/svg/sun-o.svg", color: "#e8ffe8" },
+      { id: "Immune-PM", name: "دواء المناعة", instructions: "حبتين مساءً قبل الأكل", icon: "https://img.icons8.com/color/48/pill.png", color: "#ffe8f0" },
+      { id: "Sugar-PM", name: "منظم السكر", instructions: "حبة مساءً مع الأكل", icon: "https://img.icons8.com/color/48/insulin-pen.png", color: "#e6f7ff" }
     ];
 
     function updateClock() {
-        const now = new Date();
-        dateDisplay.textContent = now.toLocaleDateString("ar-EG");
-        timeDisplay.textContent = now.toLocaleTimeString("ar-EG");
+      const now = new Date();
+      dateDisplay.textContent = now.toLocaleDateString("ar-EG");
+      timeDisplay.textContent = now.toLocaleTimeString("ar-EG");
     }
     setInterval(updateClock, 1000);
     updateClock();
 
     function loadStatus() {
-        return JSON.parse(localStorage.getItem(STORAGE_STATUS) || "{}");
+      return JSON.parse(localStorage.getItem(STORAGE_STATUS) || "{}");
     }
 
     function saveStatus(obj) {
-        localStorage.setItem(STORAGE_STATUS, JSON.stringify(obj));
+      localStorage.setItem(STORAGE_STATUS, JSON.stringify(obj));
     }
 
     function loadTimes() {
-        return JSON.parse(localStorage.getItem(STORAGE_TIMES) || "{}");
+      return JSON.parse(localStorage.getItem(STORAGE_TIMES) || "{}");
     }
 
     function saveTimes(obj) {
-        localStorage.setItem(STORAGE_TIMES, JSON.stringify(obj));
+      localStorage.setItem(STORAGE_TIMES, JSON.stringify(obj));
     }
 
     function renderMedications() {
-        const status = loadStatus();
-        const times = loadTimes();
+      const status = loadStatus();
+      const times = loadTimes();
 
-        medListDiv.innerHTML = "";
+      medListDiv.innerHTML = "";
 
-        medications.forEach((med, index) => {
-            const isTaken = status[med.id] || false;
-            const time = times[med.id] || "";
+      medications.forEach((med, index) => {
+        const isTaken = status[med.id] || false;
+        const time = times[med.id] || "";
 
-            const block = document.createElement("div");
-            block.className = "med-block";
+        const block = document.createElement("div");
+        block.className = "med-block";
 
-            block.innerHTML = `
-                <div class="med-entry ${isTaken ? "taken" : ""}">
-                    <div class="med-icon" style="background:${med.color}">
-                        <img src="${med.icon}">
-                    </div>
+        block.innerHTML = `
+          <div class="med-entry ${isTaken ? "taken" : ""}">
+            <div class="med-left">
+              <div class="med-icon" style="background:${med.color}">
+                <img src="${med.icon}">
+              </div>
+              <div class="med-info">
+                <strong>${med.name}</strong>
+                <span>${med.instructions}</span>
+              </div>
+            </div>
 
-                    <strong>${med.name}</strong>
-                    <span>${med.instructions}</span>
+            <div class="med-right">
+              <div class="time-log">${time}</div>
+              <button class="log-btn ${isTaken ? "taken-btn" : "not-taken-btn"}"
+                onclick="toggleTaken('${med.id}')">
+                ${isTaken ? "تم التناول" : "لم يتناول"}
+              </button>
+            </div>
+          </div>
+        `;
 
-                    <div class="time-log">${time}</div>
+        medListDiv.appendChild(block);
 
-                    <button class="log-btn ${isTaken ? "taken-btn" : "not-taken-btn"}"
-                        onclick="toggleTaken('${med.id}')">
-                        ${isTaken ? "تم التناول" : "لم يتناول"}
-                    </button>
-                </div>
-            `;
-
-            medListDiv.appendChild(block);
-
-            if (index < medications.length - 1) {
-                const divider = document.createElement("div");
-                divider.className = "divider";
-                medListDiv.appendChild(divider);
-            }
-        });
+        if (index < medications.length - 1) {
+          const divider = document.createElement("div");
+          divider.className = "divider";
+          medListDiv.appendChild(divider);
+        }
+      });
     }
 
     function toggleTaken(id) {
-        const status = loadStatus();
-        const times = loadTimes();
+      const status = loadStatus();
+      const times = loadTimes();
 
-        const newState = !status[id];
-        status[id] = newState;
-        saveStatus(status);
+      const newState = !status[id];
+      status[id] = newState;
+      saveStatus(status);
 
-        if (newState) {
-            const now = new Date();
-            times[id] = now.toLocaleTimeString("ar-EG");
-            saveTimes(times);
+      if (newState) {
+        const now = new Date();
+        times[id] = now.toLocaleTimeString("ar-EG");
+        saveTimes(times);
 
-            dingSound.currentTime = 0;
-            dingSound.play().catch(() => {});
-        } else {
-            delete times[id];
-            saveTimes(times);
-        }
+        dingSound.currentTime = 0;
+        dingSound.play().catch(() => {});
+      } else {
+        delete times[id];
+        saveTimes(times);
+      }
 
-        renderMedications();
+      renderMedications();
     }
 
     renderMedications();
-</script>
+  </script>
 
 </body>
 </html>

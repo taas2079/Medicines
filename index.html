@@ -8,7 +8,7 @@
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial;
-            background: linear-gradient(180deg, #f6f9fc, #eef3f8);
+            background: #f2f5f9;
             margin: 0;
             padding: 25px;
             color: #1c1c1e;
@@ -17,12 +17,10 @@
         .container {
             max-width: 850px;
             margin: auto;
-            background: rgba(255,255,255,0.75);
+            background: #ffffff;
             padding: 30px;
             border-radius: 28px;
-            backdrop-filter: blur(18px);
             box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-            border: 1px solid rgba(255,255,255,0.6);
         }
 
         h1 {
@@ -48,33 +46,30 @@
             flex-wrap: wrap;
         }
 
-        .date-label {
-            font-size: 1em;
-            color: #5c6b7a;
+        /* 🔵 الإطار الخارجي الذي يضم كل الأدوية */
+        .med-wrapper {
+            background: #fdfdfd;
+            border-radius: 22px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+            border: 1px solid #e6e6e6;
         }
 
-        .clock {
-            font-size: 0.95em;
-            color: #007aff;
+        .med-block {
+            width: 100%;
         }
 
         .med-entry {
             display: grid;
-            grid-template-columns: 45px 1fr 1.5fr auto;
+            grid-template-columns: 45px 1fr 1.5fr auto auto;
             gap: 12px;
             padding: 18px;
             border-radius: 20px;
-            background: rgba(255,255,255,0.9);
+            background: #ffffff;
             border: 1px solid #e3e9f1;
-            margin-bottom: 15px;
-            transition: 0.25s;
             box-shadow: 0 6px 18px rgba(0,0,0,0.05);
             align-items: center;
-        }
-
-        .med-entry:hover {
-            transform: translateY(-3px);
-            background: #f9fbff;
         }
 
         .med-icon {
@@ -92,20 +87,11 @@
             height: 28px;
         }
 
-        .med-entry strong {
-            font-size: 1.05em;
-            color: #1c1c1e;
-        }
-
-        .med-entry span {
-            font-size: 0.95em;
-            color: #4a4a4a;
-        }
-
-        .med-entry.taken strong,
-        .med-entry.taken span {
-            text-decoration: line-through;
-            color: #c62828;
+        .time-log {
+            font-size: 0.80em;
+            color: #007aff;
+            white-space: nowrap;
+            margin-right: 8px;
         }
 
         .log-btn {
@@ -116,30 +102,23 @@
             color: white;
             font-weight: 600;
             font-size: 0.95em;
-            transition: 0.2s;
             min-width: 110px;
         }
 
         .taken-btn { background-color: #34c759; }
         .not-taken-btn { background-color: #8e8e93; }
 
-        .log-btn:active {
-            transform: scale(0.96);
-        }
-
-        .time-log {
-            grid-column: 1 / 5;
-            font-size: 0.85em;
-            color: #007aff;
-            margin-top: 5px;
+        /* 🔵 الفاصل */
+        .divider {
+            width: 100%;
+            height: 1px;
+            background: #dcdcdc;
+            margin: 18px 0;
         }
 
         @media (max-width: 600px) {
             .med-entry {
                 grid-template-columns: 45px 1fr;
-            }
-            .time-log {
-                grid-column: 1 / 3;
             }
         }
     </style>
@@ -152,13 +131,16 @@
     <h1>💊 متابعة جرعات الأدوية</h1>
 
     <div class="date-row">
-        <div class="date-label">🗓️ <span id="current-date"></span></div>
-        <div class="clock" id="current-time"></div>
+        <div>🗓️ <span id="current-date"></span></div>
+        <div id="current-time"></div>
     </div>
 
     <h2>قائمة الأدوية اليوم</h2>
 
-    <div id="med-list"></div>
+    <!-- 🔵 الإطار الخارجي -->
+    <div class="med-wrapper">
+        <div id="med-list"></div>
+    </div>
 
 </div>
 
@@ -176,55 +158,23 @@
     const STORAGE_TIMES = "fixedMedTimes";
 
     const medications = [
-        { 
-            id: "Immune-AM", 
-            name: "دواء المناعة", 
-            instructions: "حبتين صباحاً قبل الأكل",
-            icon: "https://img.icons8.com/color/48/pill.png",
-            color: "#e8f0ff"
-        },
-        { 
-            id: "Sugar-AM", 
-            name: "منظم السكر", 
-            instructions: "حبة صباحاً مع الأكل",
-            icon: "https://img.icons8.com/color/48/insulin-pen.png",
-            color: "#fff4e6"
-        },
-        { 
-            id: "VitaminD", 
-            name: "فيتامين د", 
-            instructions: "حبة بعد الأكل يومياً",
-            icon: "https://img.icons8.com/color/48/vitamin-d.png",
-            color: "#e8ffe8"
-        },
-        { 
-            id: "Immune-PM", 
-            name: "دواء المناعة", 
-            instructions: "حبتين مساءً قبل الأكل",
-            icon: "https://img.icons8.com/color/48/pill.png",
-            color: "#ffe8f0"
-        },
-        { 
-            id: "Sugar-PM", 
-            name: "منظم السكر", 
-            instructions: "حبة مساءً مع الأكل",
-            icon: "https://img.icons8.com/color/48/insulin-pen.png",
-            color: "#e6f7ff"
-        }
+        { id: "Immune-AM", name: "دواء المناعة", instructions: "حبتين صباحاً قبل الأكل", icon: "https://img.icons8.com/color/48/pill.png", color: "#e8f0ff" },
+        { id: "Sugar-AM", name: "منظم السكر", instructions: "حبة صباحاً مع الأكل", icon: "https://img.icons8.com/color/48/insulin-pen.png", color: "#fff4e6" },
+        { id: "VitaminD", name: "فيتامين د", instructions: "حبة بعد الأكل يومياً", icon: "https://raw.githubusercontent.com/encharm/Font-Awesome-SVG-PNG/master/black/svg/sun-o.svg", color: "#e8ffe8" },
+        { id: "Immune-PM", name: "دواء المناعة", instructions: "حبتين مساءً قبل الأكل", icon: "https://img.icons8.com/color/48/pill.png", color: "#ffe8f0" },
+        { id: "Sugar-PM", name: "منظم السكر", instructions: "حبة مساءً مع الأكل", icon: "https://img.icons8.com/color/48/insulin-pen.png", color: "#e6f7ff" }
     ];
 
     function updateClock() {
         const now = new Date();
-        const dateOptions = { year: "numeric", month: "long", day: "numeric", weekday: "long" };
-        dateDisplay.textContent = now.toLocaleDateString("ar-EG", dateOptions);
+        dateDisplay.textContent = now.toLocaleDateString("ar-EG");
         timeDisplay.textContent = now.toLocaleTimeString("ar-EG");
     }
     setInterval(updateClock, 1000);
     updateClock();
 
     function loadStatus() {
-        const stored = localStorage.getItem(STORAGE_STATUS);
-        return stored ? JSON.parse(stored) : {};
+        return JSON.parse(localStorage.getItem(STORAGE_STATUS) || "{}");
     }
 
     function saveStatus(obj) {
@@ -232,8 +182,7 @@
     }
 
     function loadTimes() {
-        const stored = localStorage.getItem(STORAGE_TIMES);
-        return stored ? JSON.parse(stored) : {};
+        return JSON.parse(localStorage.getItem(STORAGE_TIMES) || "{}");
     }
 
     function saveTimes(obj) {
@@ -246,30 +195,38 @@
 
         medListDiv.innerHTML = "";
 
-        medications.forEach(med => {
+        medications.forEach((med, index) => {
             const isTaken = status[med.id] || false;
             const time = times[med.id] || "";
 
-            const entry = document.createElement("div");
-            entry.className = "med-entry" + (isTaken ? " taken" : "");
+            const block = document.createElement("div");
+            block.className = "med-block";
 
-            entry.innerHTML = `
-                <div class="med-icon" style="background:${med.color}">
-                    <img src="${med.icon}">
-                </div>
+            block.innerHTML = `
+                <div class="med-entry ${isTaken ? "taken" : ""}">
+                    <div class="med-icon" style="background:${med.color}">
+                        <img src="${med.icon}">
+                    </div>
 
-                <strong>${med.name}</strong>
-                <span>${med.instructions}</span>
+                    <strong>${med.name}</strong>
+                    <span>${med.instructions}</span>
 
-                <button class="log-btn ${isTaken ? "taken-btn" : "not-taken-btn"}"
+                    <div class="time-log">${time}</div>
+
+                    <button class="log-btn ${isTaken ? "taken-btn" : "not-taken-btn"}"
                         onclick="toggleTaken('${med.id}')">
-                    ${isTaken ? "تم التناول" : "لم يتناول"}
-                </button>
-
-                <div class="time-log">${time ? "⏱ تم التسجيل في: " + time : ""}</div>
+                        ${isTaken ? "تم التناول" : "لم يتناول"}
+                    </button>
+                </div>
             `;
 
-            medListDiv.appendChild(entry);
+            medListDiv.appendChild(block);
+
+            if (index < medications.length - 1) {
+                const divider = document.createElement("div");
+                divider.className = "divider";
+                medListDiv.appendChild(divider);
+            }
         });
     }
 
@@ -283,8 +240,7 @@
 
         if (newState) {
             const now = new Date();
-            const formatted = now.toLocaleTimeString("ar-EG");
-            times[id] = formatted;
+            times[id] = now.toLocaleTimeString("ar-EG");
             saveTimes(times);
 
             dingSound.currentTime = 0;

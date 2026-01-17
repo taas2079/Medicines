@@ -46,7 +46,6 @@
       flex-wrap: wrap;
     }
 
-    /* الإطار الخارجي */
     .med-wrapper {
       background: #fdfdfd;
       border-radius: 22px;
@@ -60,7 +59,6 @@
       width: 100%;
     }
 
-    /* تصميم البطاقة المتجاوبة */
     .med-entry {
       display: flex;
       flex-wrap: wrap;
@@ -72,6 +70,20 @@
       background: #ffffff;
       border: 1px solid #e3e9f1;
       box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+      transition: 0.15s;
+    }
+
+    /* ✔️ الاهتزاز */
+    .shake {
+      animation: shakeAnim 0.25s ease;
+    }
+
+    @keyframes shakeAnim {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-4px); }
+      50% { transform: translateX(4px); }
+      75% { transform: translateX(-3px); }
+      100% { transform: translateX(0); }
     }
 
     .med-left {
@@ -99,11 +111,31 @@
     .med-info {
       display: flex;
       flex-direction: column;
+      position: relative;
     }
 
     .med-info strong {
       font-size: 1em;
       color: #1c1c1e;
+      transition: 0.2s;
+    }
+
+    /* ✔️ الشطب بالأحمر */
+    .med-entry.taken .med-info strong {
+      text-decoration: line-through;
+      color: #c62828;
+    }
+
+    /* ✔️ أيقونة الصح */
+    .checkmark {
+      display: none;
+      color: #34c759;
+      font-size: 1.2em;
+      margin-right: 6px;
+    }
+
+    .med-entry.taken .checkmark {
+      display: inline-block;
     }
 
     .med-info span {
@@ -228,13 +260,17 @@
         block.className = "med-block";
 
         block.innerHTML = `
-          <div class="med-entry ${isTaken ? "taken" : ""}">
+          <div class="med-entry ${isTaken ? "taken" : ""}" id="entry-${med.id}">
             <div class="med-left">
               <div class="med-icon" style="background:${med.color}">
                 <img src="${med.icon}">
               </div>
+
               <div class="med-info">
-                <strong>${med.name}</strong>
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <span class="checkmark">✔</span>
+                  <strong>${med.name}</strong>
+                </div>
                 <span>${med.instructions}</span>
               </div>
             </div>
@@ -266,6 +302,11 @@
       const newState = !status[id];
       status[id] = newState;
       saveStatus(status);
+
+      const entry = document.getElementById(`entry-${id}`);
+      entry.classList.add("shake");
+
+      setTimeout(() => entry.classList.remove("shake"), 300);
 
       if (newState) {
         const now = new Date();

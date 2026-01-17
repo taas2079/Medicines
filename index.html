@@ -2,257 +2,302 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <title> متابعة الأدوية اليومي الثابت - شطب أحمر</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>متابعة الأدوية - iOS Style</title>
+
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f8f9fa;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial;
+            background: linear-gradient(180deg, #f6f9fc, #eef3f8);
             margin: 0;
-            padding: 20px;
-            color: #343a40;
-            text-align: right;
+            padding: 25px;
+            color: #1c1c1e;
         }
+
         .container {
-            max-width: 700px;
-            width: 100%;
+            max-width: 850px;
             margin: auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-            box-sizing: border-box;
+            background: rgba(255,255,255,0.75);
+            padding: 30px;
+            border-radius: 28px;
+            backdrop-filter: blur(18px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            border: 1px solid rgba(255,255,255,0.6);
         }
+
         h1 {
-            color: #007bff;
             text-align: center;
-            margin-bottom: 20px;
-            font-size: 1.5em;
+            color: #007aff;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+            font-weight: 700;
         }
+
         h2 {
-            color: #007bff;
-            margin-top: 20px;
-            padding-bottom: 5px;
+            margin-top: 25px;
+            color: #5c6b7a;
             font-size: 1.2em;
+            font-weight: 600;
         }
-        /* --- قسم المتابعة اليومية --- */
-        #daily-intake-area {
-            border: 2px solid #007bff;
-            border-radius: 10px;
-            padding: 15px;
-            background-color: #eaf3ff;
-            margin-bottom: 10px;
-        }
-        .med-config-entry {
-            display: grid;
-            grid-template-columns: 1fr 1.5fr auto; 
-            gap: 10px;
+
+        .date-row {
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
-            padding: 10px 5px;
-            border-bottom: 1px dashed #ced4da;
-            transition: opacity 0.3s;
-        }
-        .med-config-entry:last-child {
-            border-bottom: none;
-        }
-        
-        /* **قاعدة الشطب الجديدة باللون الأحمر** */
-        .med-config-entry.taken-status strong,
-        .med-config-entry.taken-status .instructions-text {
-            text-decoration: line-through; 
-            color: #dc3545; /* الأحمر الفاقع */
-        }
-        /* ملاحظة: سنبقي اللون الأصلي على الخلفية البيضاء */
-        .med-config-entry.taken-status strong {
-            color: #b30000; /* أحمر داكن لتمييز الاسم أكثر */
+            gap: 10px;
+            flex-wrap: wrap;
         }
 
-
-        .med-config-entry strong {
+        .date-label {
             font-size: 1em;
-            color: #343a40;
-            transition: all 0.3s;
+            color: #5c6b7a;
         }
-        .instructions-text {
-            font-size: 0.9em;
-            color: #6c757d;
-            transition: all 0.3s;
+
+        .clock {
+            font-size: 0.95em;
+            color: #007aff;
         }
-        
-        /* --- تنسيق الأزرار --- */
+
+        .med-entry {
+            display: grid;
+            grid-template-columns: 45px 1fr 1.5fr auto;
+            gap: 12px;
+            padding: 18px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.9);
+            border: 1px solid #e3e9f1;
+            margin-bottom: 15px;
+            transition: 0.25s;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+            align-items: center;
+        }
+
+        .med-entry:hover {
+            transform: translateY(-3px);
+            background: #f9fbff;
+        }
+
+        .med-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px;
+        }
+
+        .med-icon img {
+            width: 28px;
+            height: 28px;
+        }
+
+        .med-entry strong {
+            font-size: 1.05em;
+            color: #1c1c1e;
+        }
+
+        .med-entry span {
+            font-size: 0.95em;
+            color: #4a4a4a;
+        }
+
+        .med-entry.taken strong,
+        .med-entry.taken span {
+            text-decoration: line-through;
+            color: #c62828;
+        }
+
         .log-btn {
-            color: white;
+            padding: 10px 16px;
             border: none;
-            padding: 8px 10px;
-            border-radius: 5px;
+            border-radius: 14px;
             cursor: pointer;
-            font-weight: bold;
-            transition: background-color 0.3s;
-            width: 100px;
-            text-align: center;
-            white-space: nowrap;
-            font-size: 0.9em;
+            color: white;
+            font-weight: 600;
+            font-size: 0.95em;
+            transition: 0.2s;
+            min-width: 110px;
         }
 
-        /* --- الألوان حسب حالة التناول --- */
-        .taken { background-color: #f23924; } /* الزر يبقى أحمر */
-        .not-taken { background-color: #6c757d; } 
-        .taken:hover { background-color: #1e7e34; }
-        .not-taken:hover { background-color: #5a6268; }
+        .taken-btn { background-color: #34c759; }
+        .not-taken-btn { background-color: #8e8e93; }
 
-        /* **استعلامات الوسائط (Media Queries) للهواتف الصغيرة جدًا** */
-        @media (max-width: 500px) {
-            .med-config-entry {
-                grid-template-columns: 1fr 1fr;
-                grid-template-areas: 
-                    "med-name instructions"
-                    "button button";
-                padding-bottom: 20px;
+        .log-btn:active {
+            transform: scale(0.96);
+        }
+
+        .time-log {
+            grid-column: 1 / 5;
+            font-size: 0.85em;
+            color: #007aff;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 600px) {
+            .med-entry {
+                grid-template-columns: 45px 1fr;
             }
-            .med-config-entry strong {
-                grid-area: med-name;
-            }
-            .instructions-text {
-                grid-area: instructions;
-                text-align: left;
-            }
-            .log-btn {
-                grid-area: button;
-                width: 100%;
-                padding: 12px 10px;
-                font-size: 1em;
-                margin-top: 10px;
+            .time-log {
+                grid-column: 1 / 3;
             }
         }
     </style>
 </head>
+
 <body>
 
 <div class="container">
-    <h1>💊 مواعيد جرعات الأدوية</h1>
 
-    <div id="daily-intake-area">
-        <h2>🗓️ <span id="current-date"></span></h2>
-            
-        <div class="med-config-entry" data-med-entry-id="Immune-AM">
-            <strong>دواء المناعة</strong>
-            <span class="instructions-text">حبتين صباحاً قبل الأكل</span>
-            <button class="log-btn not-taken" data-med-id="Immune-AM">لم يتناول</button>
-        </div>
+    <h1>💊 متابعة جرعات الأدوية</h1>
 
-        <div class="med-config-entry" data-med-entry-id="SugarRegulator-AM">
-            <strong>منظم السكر</strong>
-            <span class="instructions-text">حبة صباحاً مع الأكل</span>
-            <button class="log-btn not-taken" data-med-id="SugarRegulator-AM">لم يتناول</button>
-        </div>
-        
-        
-        <div class="med-config-entry" data-med-entry-id="VitaminD-Daily">
-            <strong>فيتامين د</strong>
-            <span class="instructions-text">حبة بعد الأكل يومياً</span>
-            <button class="log-btn not-taken" data-med-id="VitaminD-Daily">لم يتناول</button>
-        </div>
-        
-        <div class="med-config-entry" data-med-entry-id="Immune-PM">
-            <strong>دواء المناعة</strong>
-            <span class="instructions-text">حبتين مساءً قبل الأكل</span>
-            <button class="log-btn not-taken" data-med-id="Immune-PM">لم يتناول</button>
-        </div>
-        
-        <div class="med-config-entry" data-med-entry-id="SugarRegulator-PM">
-            <strong>منظم السكر</strong>
-            <span class="instructions-text">حبة مع الأكل مساءً</span>
-            <button class="log-btn not-taken" data-med-id="SugarRegulator-PM">لم يتناول</button>
-        </div>
-
+    <div class="date-row">
+        <div class="date-label">🗓️ <span id="current-date"></span></div>
+        <div class="clock" id="current-time"></div>
     </div>
-    
+
+    <h2>قائمة الأدوية اليوم</h2>
+
+    <div id="med-list"></div>
+
 </div>
 
-<script>
-    const logButtons = document.querySelectorAll('.log-btn');
-    const dateDisplay = document.getElementById('current-date');
-    const STORAGE_KEY_STATUS = 'permanentMedStatus';
+<audio id="ding-sound" preload="auto">
+    <source src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg" type="audio/ogg">
+</audio>
 
-    // --- وظيفة تحديث التاريخ والوقت كل ثانية ---
+<script>
+    const dateDisplay = document.getElementById("current-date");
+    const timeDisplay = document.getElementById("current-time");
+    const medListDiv = document.getElementById("med-list");
+    const dingSound = document.getElementById("ding-sound");
+
+    const STORAGE_STATUS = "fixedMedStatus";
+    const STORAGE_TIMES = "fixedMedTimes";
+
+    const medications = [
+        { 
+            id: "Immune-AM", 
+            name: "دواء المناعة", 
+            instructions: "حبتين صباحاً قبل الأكل",
+            icon: "https://img.icons8.com/color/48/pill.png",
+            color: "#e8f0ff"
+        },
+        { 
+            id: "Sugar-AM", 
+            name: "منظم السكر", 
+            instructions: "حبة صباحاً مع الأكل",
+            icon: "https://img.icons8.com/color/48/insulin-pen.png",
+            color: "#fff4e6"
+        },
+        { 
+            id: "VitaminD", 
+            name: "فيتامين د", 
+            instructions: "حبة بعد الأكل يومياً",
+            icon: "https://img.icons8.com/color/48/vitamin-d.png",
+            color: "#e8ffe8"
+        },
+        { 
+            id: "Immune-PM", 
+            name: "دواء المناعة", 
+            instructions: "حبتين مساءً قبل الأكل",
+            icon: "https://img.icons8.com/color/48/pill.png",
+            color: "#ffe8f0"
+        },
+        { 
+            id: "Sugar-PM", 
+            name: "منظم السكر", 
+            instructions: "حبة مساءً مع الأكل",
+            icon: "https://img.icons8.com/color/48/insulin-pen.png",
+            color: "#e6f7ff"
+        }
+    ];
+
     function updateClock() {
         const now = new Date();
-        // تنسيق التاريخ والوقت (اليوم - الشهر - السنة | الساعة : الدقيقة : الثانية)
-        const formattedDate = now.toLocaleDateString('ar-EG', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
-        const formattedTime = now.toLocaleTimeString('ar-EG', {
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit'
-        });
-        
-        dateDisplay.textContent = `${formattedDate} | ${formattedTime}`;
+        const dateOptions = { year: "numeric", month: "long", day: "numeric", weekday: "long" };
+        dateDisplay.textContent = now.toLocaleDateString("ar-EG", dateOptions);
+        timeDisplay.textContent = now.toLocaleTimeString("ar-EG");
     }
-
-    // تشغيل الدالة فوراً ثم كل 1000 ملي ثانية (ثانية واحدة)
-    updateClock();
     setInterval(updateClock, 1000);
+    updateClock();
 
-    // --- وظائف التخزين لحالة الأزرار ---
-    function getMedStatus() {
-        const stored = localStorage.getItem(STORAGE_KEY_STATUS);
+    function loadStatus() {
+        const stored = localStorage.getItem(STORAGE_STATUS);
         return stored ? JSON.parse(stored) : {};
     }
-    
-    function saveMedStatus(statusObject) {
-        localStorage.setItem(STORAGE_KEY_STATUS, JSON.stringify(statusObject));
+
+    function saveStatus(obj) {
+        localStorage.setItem(STORAGE_STATUS, JSON.stringify(obj));
     }
 
-    // --- وظيفة تحديث حالة الأزرار على الواجهة ---
-    function updateButtonState(button, isTaken) {
-        const entryDiv = button.closest('.med-config-entry');
+    function loadTimes() {
+        const stored = localStorage.getItem(STORAGE_TIMES);
+        return stored ? JSON.parse(stored) : {};
+    }
 
-        if (isTaken) {
-            button.classList.remove('not-taken');
-            button.classList.add('taken');
-            button.textContent = 'تم التناول';
-            entryDiv.classList.add('taken-status'); // إضافة كلاس الشطب
+    function saveTimes(obj) {
+        localStorage.setItem(STORAGE_TIMES, JSON.stringify(obj));
+    }
+
+    function renderMedications() {
+        const status = loadStatus();
+        const times = loadTimes();
+
+        medListDiv.innerHTML = "";
+
+        medications.forEach(med => {
+            const isTaken = status[med.id] || false;
+            const time = times[med.id] || "";
+
+            const entry = document.createElement("div");
+            entry.className = "med-entry" + (isTaken ? " taken" : "");
+
+            entry.innerHTML = `
+                <div class="med-icon" style="background:${med.color}">
+                    <img src="${med.icon}">
+                </div>
+
+                <strong>${med.name}</strong>
+                <span>${med.instructions}</span>
+
+                <button class="log-btn ${isTaken ? "taken-btn" : "not-taken-btn"}"
+                        onclick="toggleTaken('${med.id}')">
+                    ${isTaken ? "تم التناول" : "لم يتناول"}
+                </button>
+
+                <div class="time-log">${time ? "⏱ تم التسجيل في: " + time : ""}</div>
+            `;
+
+            medListDiv.appendChild(entry);
+        });
+    }
+
+    function toggleTaken(id) {
+        const status = loadStatus();
+        const times = loadTimes();
+
+        const newState = !status[id];
+        status[id] = newState;
+        saveStatus(status);
+
+        if (newState) {
+            const now = new Date();
+            const formatted = now.toLocaleTimeString("ar-EG");
+            times[id] = formatted;
+            saveTimes(times);
+
+            dingSound.currentTime = 0;
+            dingSound.play().catch(() => {});
         } else {
-            button.classList.remove('taken');
-            button.classList.add('not-taken');
-            button.textContent = 'لم يتناول';
-            entryDiv.classList.remove('taken-status'); // إزالة كلاس الشطب
+            delete times[id];
+            saveTimes(times);
         }
+
+        renderMedications();
     }
 
-    // --- وظيفة تطبيق الحالة المحفوظة عند تحميل الصفحة ---
-    function loadButtonStates() {
-        const status = getMedStatus();
-        logButtons.forEach(button => {
-            const medId = button.getAttribute('data-med-id');
-            const isTaken = status.hasOwnProperty(medId) ? status[medId] : false;
-            
-            updateButtonState(button, isTaken);
-        });
-    }
-
-    // --- مستمعي الأحداث: تبديل الحالة عند الضغط على الزر ---
-    logButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const medId = this.getAttribute('data-med-id');
-            const status = getMedStatus();
-
-            const isCurrentlyTaken = this.classList.contains('taken');
-            const newStatus = !isCurrentlyTaken;
-
-            // تحديث الواجهة والتخزين
-            updateButtonState(this, newStatus);
-            status[medId] = newStatus;
-            saveMedStatus(status);
-        });
-    });
-
-    // تحميل الحالة عند فتح الصفحة
-    loadButtonStates();
+    renderMedications();
 </script>
 
 </body>

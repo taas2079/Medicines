@@ -70,10 +70,17 @@
       background: #ffffff;
       border: 1px solid #e3e9f1;
       box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
-      transition: 0.15s;
+      transition: 0.25s ease;
     }
 
-    /* ✔️ الاهتزاز */
+    /* ✔ خلفية خضراء فاتحة عند التناول */
+    .med-entry.taken {
+      background: #dfffe0 !important;
+      border-color: #34c759 !important;
+      box-shadow: 0 0 0 2px #34c75933;
+    }
+
+    /* ✔ الاهتزاز */
     .shake {
       animation: shakeAnim 0.25s ease;
     }
@@ -120,13 +127,13 @@
       transition: 0.2s;
     }
 
-    /* ✔️ الشطب بالأحمر */
+    /* ✔ الشطب بالأحمر */
     .med-entry.taken .med-info strong {
       text-decoration: line-through;
       color: #c62828;
     }
 
-    /* ✔️ أيقونة الصح */
+    /* ✔ أيقونة الصح */
     .checkmark {
       display: none;
       color: #34c759;

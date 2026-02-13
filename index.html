@@ -11,14 +11,15 @@
     :root {
       --primary: #007aff;
       --success: #34c759;
-      --bg: #f2f2f7; /* لون خلفية iOS الافتراضي */
+      --bg: #f2f2f7; 
+      --card-bg: #ffffff;
     }
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
       background: var(--bg);
       margin: 0;
-      padding: 10px; /* تقليل الحواف الخارجية */
+      padding: 20px 15px;
       color: #1c1c1e;
       overflow-x: hidden;
     }
@@ -26,56 +27,65 @@
     .container {
       max-width: 500px;
       margin: auto;
-      background: transparent; /* جعل الخلفية شفافة لتبدو كأجزاء النظام */
     }
 
     header {
-      text-align: center;
-      margin-bottom: 15px;
+      text-align: right;
+      margin-bottom: 25px;
+      padding-right: 10px;
     }
 
     h1 {
-      font-size: 1.5rem;
-      margin: 5px 0;
+      font-size: 2rem;
+      margin: 0;
       color: #000;
+      font-weight: 800;
     }
 
     .date-badge {
-      font-size: 0.8rem;
+      font-size: 1rem;
       color: #8e8e93;
+      font-weight: 500;
+      text-transform: capitalize;
     }
 
-    /* تصميم القائمة المكثفة */
+    /* تصميم القائمة الجديد */
     .med-list-container {
-      background: #fff;
-      border-radius: 12px;
+      background: var(--card-bg);
+      border-radius: 16px;
       overflow: hidden;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
     }
 
     .med-row {
       display: flex;
       align-items: center;
-      padding: 10px 15px;
-      border-bottom: 0.5px solid #c6c6c8; /* خط فاصل نحيف مثل الايفون */
-      transition: background 0.2s;
-      gap: 12px;
+      padding: 14px 16px;
+      border-bottom: 0.5px solid #e5e5ea;
+      transition: all 0.2s ease;
+      gap: 15px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .med-row:active {
+      background-color: #f2f2f7;
     }
 
     .med-row:last-child { border-bottom: none; }
 
     .med-row.taken {
-      background: #f9f9f9;
+      background: #fafafa;
     }
 
     .med-icon-box {
-      width: 32px; /* تصغير الأيقونة */
-      height: 32px;
-      border-radius: 8px;
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
+      font-size: 22px;
       flex-shrink: 0;
     }
 
@@ -86,10 +96,9 @@
 
     .med-info strong {
       display: block;
-      font-size: 0.95rem;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      font-size: 1.05rem;
+      color: #000;
+      margin-bottom: 2px;
     }
 
     .med-row.taken .med-info strong {
@@ -98,47 +107,50 @@
     }
 
     .med-info span {
-      font-size: 0.75rem;
+      font-size: 0.85rem;
       color: #8e8e93;
+      display: block;
     }
 
     .time-status {
-      font-size: 0.7rem;
+      font-size: 0.75rem;
       color: var(--primary);
-      text-align: left;
-      font-weight: 500;
+      background: #e8f0ff;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-weight: 600;
     }
 
-    /* زر الصح الدائري الصغير */
+    /* زر الصح الدائري */
     .check-circle {
-      width: 24px;
-      height: 24px;
+      width: 26px;
+      height: 26px;
       border-radius: 50%;
-      border: 1.5px solid #c6c6c8;
+      border: 2px solid #d1d1d6;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: 0.2s;
+      transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       flex-shrink: 0;
     }
 
     .taken .check-circle {
       background: var(--success);
       border-color: var(--success);
+      transform: scale(1.1);
     }
 
     .check-circle svg {
-      width: 14px;
-      height: 14px;
+      width: 16px;
+      height: 16px;
       fill: none;
       stroke: white;
-      stroke-width: 3;
+      stroke-width: 3.5;
       display: none;
     }
 
     .taken .check-circle svg { display: block; }
 
-    /* إخفاء شريط التمرير */
     body::-webkit-scrollbar { display: none; }
   </style>
 </head>
@@ -147,10 +159,8 @@
 
   <div class="container">
     <header>
-      <h1>💊 جرعاتي</h1>
-      <div class="date-badge">
-        <span id="current-date"></span>
-      </div>
+      <div class="date-badge" id="current-date"></div>
+      <h1>أدويتي اليومية</h1>
     </header>
 
     <div class="med-list-container" id="med-list">
@@ -163,8 +173,9 @@
 
   <script>
     const medications = [
-      { id: "Immune-AM", name: "سيليسيبت (مناعة)", instructions: "2 حبة - صباحاً", icon: "🛡️", color: "#e8f0ff" },
       { id: "Sugar-AM", name: "فورميت (سكر)", instructions: "1 حبة - صباحاً", icon: "📉", color: "#fff4e6" },
+      { id: "Empa-25", name: "إمباجليفلوزين اس بي سي", instructions: "1 حبة (25 ملجم) - مرة يومياً", icon: "💊", color: "#f0e8ff" },
+          { id: "Immune-AM", name: "سيليسيبت (مناعة)", instructions: "2 حبة - صباحاً", icon: "🛡️", color: "#e8f0ff" },
       { id: "Omega3", name: "أوميجا 3", instructions: "1 حبة - وسط الأكل", icon: "🐟", color: "#fff9db" },
       { id: "VitaminD", name: "فيتامين د", instructions: "1 حبة - يومياً", icon: "☀️", color: "#e8ffe8" },
       { id: "Immune-PM", name: "سيليسيبت (مناعة)", instructions: "2 حبة - مساءً", icon: "🛡️", color: "#ffe8f0" },
@@ -173,7 +184,8 @@
 
     function updateDate() {
       const now = new Date();
-      document.getElementById("current-date").textContent = now.toLocaleDateString("ar-EG", { weekday: 'long', day: 'numeric', month: 'short' });
+      const options = { weekday: 'long', day: 'numeric', month: 'long' };
+      document.getElementById("current-date").textContent = now.toLocaleDateString("ar-EG", options);
     }
 
     function render() {
@@ -186,7 +198,7 @@
         return `
           <div class="med-row ${isTaken ? 'taken' : ''}" onclick="toggle('${med.id}')">
             <div class="check-circle">
-              <svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"></path></svg>
+              <svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
             </div>
             <div class="med-icon-box" style="background:${med.color}">${med.icon}</div>
             <div class="med-info">
@@ -221,4 +233,3 @@
   </script>
 </body>
 </html>
-
